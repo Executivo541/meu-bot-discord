@@ -26,9 +26,14 @@ class Client(discord.Client):
         super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self)
         self.banco_moedas = {}
+
+    async def setup_hook(self):
+        # Sincroniza os comandos uma única vez ao iniciar
+        await self.tree.sync()
+        print("Comandos sincronizados!")
+
     async def on_ready(self):
         print(f'Logado como {self.user}!')
-        await self.tree.sync()
 
 client = Client()
 
@@ -73,5 +78,7 @@ async def trabalhar(interaction: discord.Interaction):
     ganho = random.randint(50, 200)
     await interaction.response.send_message(f"💼 Ganhou {ganho} moedas!")
 
-manter_vivo()
-client.run(TOKEN)
+# --- INICIALIZAÇÃO ---
+if __name__ == "__main__":
+    manter_vivo()
+    client.run(TOKEN)
